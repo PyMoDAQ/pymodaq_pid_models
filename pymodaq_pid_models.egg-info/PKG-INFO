@@ -1,0 +1,29 @@
+Metadata-Version: 1.1
+Name: pymodaq-pid-models
+Version: 0.0.1
+Summary: PID models to use with PyMoDAQ
+Home-page: http://pymodaq.cnrs.fr
+Author: Sébastien Weber
+Author-email: sebastien.weber@cemes.fr
+License: MIT
+Description: # PyMoDAQ PID models
+        
+        PyMoDAQ, Modular Data Acquisition with Python, is a set of **python** modules used to perform automated measurements. 
+        
+        This repository contains various models to interpret measurements from Viewer modules to feed a PID loop and translate
+        as well outputs to send to actuators in order to stabilize the closed loop system
+        
+        GitHub repo: https://github.com/CEMES-CNRS
+        
+        Documentation: http://pymodaq.cnrs.fr/
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Other Environment
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Human Machine Interfaces
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: User Interfaces
