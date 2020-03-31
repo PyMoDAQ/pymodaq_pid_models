@@ -110,3 +110,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.idea/pymodaq_pid_models.iml
+.idea/workspace.xml
+*.pyc
