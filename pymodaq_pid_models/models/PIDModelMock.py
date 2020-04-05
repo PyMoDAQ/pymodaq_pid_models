@@ -1,11 +1,12 @@
 import os
 from pyqtgraph.parametertree import Parameter
 from PyQt5.QtCore import pyqtSignal
-from pymodaq.daq_utils.daq_utils import ThreadCommand, make_enum, PIDModelGeneric, check_modules
+from pymodaq.daq_utils.daq_utils import ThreadCommand, make_enum
+from ..utils import PIDModelGeneric, check_modules
 import time
 
-DAQ_Viewer_Det_type=make_enum('daq_0Dviewer')
-DAQ_Move_Stage_type=make_enum('daq_move')
+DAQ_Viewer_Det_type = make_enum('daq_0Dviewer')
+DAQ_Move_Stage_type = make_enum('daq_move')
 
 class PIDModelMock(PIDModelGeneric):
     params = []

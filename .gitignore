@@ -113,3 +113,6 @@ venv.bak/
 .idea/pymodaq_pid_models.iml
 .idea/workspace.xml
 *.pyc
+*.iml
+*.xml
+*.pyc

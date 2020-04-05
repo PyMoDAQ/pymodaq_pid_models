@@ -3,7 +3,8 @@ from pyqtgraph.parametertree import Parameter
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSignal, QThread, QTimer, pyqtSlot
 from pyqtgraph.dockarea import Dock
-from pymodaq.daq_utils.daq_utils import ThreadCommand, make_enum, linspace_step, get_set_pid_path, PIDModelGeneric, check_modules
+from pymodaq.daq_utils.daq_utils import ThreadCommand, make_enum, linspace_step, get_set_pid_path
+from ..utils import PIDModelGeneric, check_modules
 from pymodaq.daq_utils.plotting.viewer1D.viewer1D_main import Viewer1D
 from pymodaq.daq_utils import ellipses
 import time
@@ -50,12 +51,10 @@ class PIDModelMichelsonDemo(PIDModelGeneric):
 
     ]
 
-
     actuators = ['PI']
     actuators_name = ['Axis test PID']
 
-
-    detectors_type = ['DAQ2D'] # with entries either 'DAQ0D', 'DAQ1D' or 'DAQ2D'
+    detectors_type = ['DAQ2D']  # with entries either 'DAQ0D', 'DAQ1D' or 'DAQ2D'or 'DAQND'
     detectors = ['OpenCVCam']
     detectors_name = ['Testing PID']
 
