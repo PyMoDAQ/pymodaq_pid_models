@@ -116,3 +116,4 @@ venv.bak/
 *.iml
 *.xml
 *.pyc
+pymodaq_pid_models/tutorial.Learner1D.ipynb
