@@ -6,7 +6,7 @@ from pyqtgraph.dockarea import Dock
 from pymodaq.daq_utils.daq_utils import ThreadCommand, make_enum, linspace_step, get_set_pid_path
 from ..utils import PIDModelGeneric, check_modules
 from pymodaq.daq_utils.plotting.viewer1D.viewer1D_main import Viewer1D
-from pymodaq.daq_utils import ellipses
+from pymodaq.daq_utils.math_utils import LSqEllipse
 import time
 import numpy as np
 from collections import OrderedDict
@@ -70,7 +70,7 @@ class PIDModelMichelsonDemo(PIDModelGeneric):
 
         self.curr_time = time.perf_counter()
 
-        self.lsqe = ellipses.LSqEllipse()
+        self.lsqe = LSqEllipse()
 
         self.phases = np.zeros((100,))
         self.curr_phase = 0
