@@ -3,16 +3,14 @@ from pyqtgraph.parametertree import Parameter
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSignal, QThread, QTimer, pyqtSlot
 from pyqtgraph.dockarea import Dock
-from pymodaq.daq_utils.daq_utils import ThreadCommand, make_enum, linspace_step, get_set_pid_path
+from pymodaq.daq_utils.daq_utils import ThreadCommand, linspace_step, get_set_pid_path
 from ..utils import PIDModelGeneric, check_modules
 from pymodaq.daq_utils.plotting.viewer1D.viewer1D_main import Viewer1D
 from pymodaq.daq_utils.math_utils import LSqEllipse
 import time
 import numpy as np
 from collections import OrderedDict
-from scipy.optimize import curve_fit
-DAQ_Viewer_Det_type=make_enum('daq_0Dviewer')
-DAQ_Move_Stage_type=make_enum('daq_move')
+
 
 class PIDModelMichelsonDemo(PIDModelGeneric):
     params = [
@@ -58,7 +56,7 @@ class PIDModelMichelsonDemo(PIDModelGeneric):
     detectors = ['OpenCVCam']
     detectors_name = ['Testing PID']
 
-    check_modules(detectors, detectors_type, actuators)
+    check_modules(detectors, detectors_type, actuators, mod_name=__module__)
 
 
     def __init__(self, pid_controller):

@@ -1,6 +1,13 @@
 from PyQt5.QtCore import pyqtSignal
-from pymodaq.daq_utils.daq_utils import ThreadCommand, get_names_simple
+from pymodaq.daq_utils.daq_utils import ThreadCommand, get_plugins, set_logger, get_module_name
 
+logger = set_logger(get_module_name(__file__))
+
+DAQ_Move_Stage_type = get_plugins('daq_move')
+DAQ_0DViewer_Det_types = get_plugins('daq_0Dviewer')
+DAQ_1DViewer_Det_types = get_plugins('daq_1Dviewer')
+DAQ_2DViewer_Det_types = get_plugins('daq_2Dviewer')
+DAQ_NDViewer_Det_types = get_plugins('daq_NDviewer')
 
 class PIDModelGeneric:
     params = []
@@ -68,18 +75,18 @@ class PIDModelGeneric:
 
         return [output]
 
-def check_modules(detectors, detectors_type, actuators):
+def check_modules(detectors, detectors_type, actuators, mod_name='module_name'):
     for ind_det, det in enumerate(detectors):
         if detectors_type[ind_det] == 'DAQ0D':
-            if det not in get_names_simple('daq_0Dviewer'):
-                raise Exception('Invalid actuator plugin')
+            if det not in [det.__name__ for det in DAQ_0DViewer_Det_types]:
+                logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
         elif detectors_type[ind_det] == 'DAQ1D':
-            if det not in get_names_simple('daq_1Dviewer'):
-                raise Exception('Invalid actuator plugin')
+            if det not in [det.__name__ for det in DAQ_1DViewer_Det_types]:
+                logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
         elif detectors_type[ind_det] == 'DAQ2D':
-            if det not in get_names_simple('daq_2Dviewer'):
-                raise Exception('Invalid actuator plugin')
+            if det not in [det.__name__ for det in DAQ_2DViewer_Det_types]:
+                logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
 
     for act in actuators:
-        if act not in get_names_simple('daq_move'):
-            raise Exception('Invalid actuator plugin')
+        if act not in [det.__name__ for det in DAQ_Move_Stage_type]:
+            logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {act} for {mod_name} module')

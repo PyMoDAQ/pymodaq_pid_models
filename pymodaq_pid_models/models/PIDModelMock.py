@@ -1,12 +1,11 @@
 import os
 from pyqtgraph.parametertree import Parameter
 from PyQt5.QtCore import pyqtSignal
-from pymodaq.daq_utils.daq_utils import ThreadCommand, make_enum
+from pymodaq.daq_utils.daq_utils import ThreadCommand
 from ..utils import PIDModelGeneric, check_modules
 import time
 
-DAQ_Viewer_Det_type = make_enum('daq_0Dviewer')
-DAQ_Move_Stage_type = make_enum('daq_move')
+
 
 class PIDModelMock(PIDModelGeneric):
     params = []
@@ -15,15 +14,12 @@ class PIDModelMock(PIDModelGeneric):
 
     actuators = ['Mock']
     actuators_name = ['Axis test PID']
-    for act in actuators:
-        if act not in DAQ_Move_Stage_type.names('daq_move'):
-            raise Exception('Invalid actuator plugin')
 
     detectors_type = ['DAQ0D'] # with entries either 'DAQ0D', 'DAQ1D' or 'DAQ2D'
     detectors = ['Mock']
     detectors_name = ['Testing PID']
 
-    check_modules(detectors, detectors_type, actuators)
+    check_modules(detectors, detectors_type, actuators, mod_name=__module__)
 
     def __init__(self, pid_controller):
         super().__init__(pid_controller)

@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Python 3.7 (pymodaq_dev)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="pymodaq" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="requirementsPath" value="" />

@@ -57,9 +57,7 @@ setup(
     #           'mergetest': helpers.MergeTestCommand,
     #           'style': helpers.StyleCommand},
     packages=find_packages(),
-    package_data={'': ['*.dll']},
-    install_requires = [
-        ],
+    install_requires=[],
     **setupOpts
 )
 
