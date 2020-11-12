@@ -78,15 +78,15 @@ class PIDModelGeneric:
 def check_modules(detectors, detectors_type, actuators, mod_name='module_name'):
     for ind_det, det in enumerate(detectors):
         if detectors_type[ind_det] == 'DAQ0D':
-            if det not in [det.__name__ for det in DAQ_0DViewer_Det_types]:
+            if det not in [det['name'] for det in DAQ_0DViewer_Det_types]:
                 logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
         elif detectors_type[ind_det] == 'DAQ1D':
-            if det not in [det.__name__ for det in DAQ_1DViewer_Det_types]:
+            if det not in [det['name'] for det in DAQ_1DViewer_Det_types]:
                 logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
         elif detectors_type[ind_det] == 'DAQ2D':
-            if det not in [det.__name__ for det in DAQ_2DViewer_Det_types]:
+            if det not in [det['name'] for det in DAQ_2DViewer_Det_types]:
                 logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
 
     for act in actuators:
-        if act not in [det.__name__ for det in DAQ_Move_Stage_type]:
+        if act not in [det['name'] for det in DAQ_Move_Stage_type]:
             logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {act} for {mod_name} module')
