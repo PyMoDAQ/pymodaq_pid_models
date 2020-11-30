@@ -122,3 +122,4 @@ pymodaq_pid_models/__pycache__/version.cpython-37.pyc
 .idea/pymodaq_pid_models.iml
 *.iml
 *.pyc
+.idea/pymodaq_pid_models.iml
