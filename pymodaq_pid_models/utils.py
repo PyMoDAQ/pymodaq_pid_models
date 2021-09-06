@@ -9,14 +9,12 @@ DAQ_1DViewer_Det_types = get_plugins('daq_1Dviewer')
 DAQ_2DViewer_Det_types = get_plugins('daq_2Dviewer')
 DAQ_NDViewer_Det_types = get_plugins('daq_NDviewer')
 
+
 class PIDModelGeneric:
     params = []
 
     status_sig = pyqtSignal(ThreadCommand)
-    actuators = []
     actuators_name = []
-    detectors_type = []  # with entries either 'DAQ0D', 'DAQ1D' or 'DAQ2D'
-    detectors = []
     detectors_name = []
 
     def __init__(self, pid_controller):
@@ -25,6 +23,17 @@ class PIDModelGeneric:
         self.data_names = None
         self.curr_output = None
         self.curr_input = None
+
+        self.check_modules(pid_controller.module_manager)
+
+    def check_modules(self, module_manager):
+        for act in self.actuators_name:
+            if act not in module_manager.actuators_name:
+                logger.warning(f'The actuator {act} defined in the PID model is not present in the Dashboard')
+                return False
+        for det in self.detectors_name:
+            if det not in module_manager.detectors_name:
+                logger.warning(f'The detector {det} defined in the PID model is not present in the Dashboard')
 
     def update_detector_names(self):
         names = self.pid_controller.settings.child('main_settings', 'detector_modules').value()['selected']
@@ -75,18 +84,3 @@ class PIDModelGeneric:
 
         return [output]
 
-def check_modules(detectors, detectors_type, actuators, mod_name='module_name'):
-    for ind_det, det in enumerate(detectors):
-        if detectors_type[ind_det] == 'DAQ0D':
-            if det not in [det['name'] for det in DAQ_0DViewer_Det_types]:
-                logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
-        elif detectors_type[ind_det] == 'DAQ1D':
-            if det not in [det['name'] for det in DAQ_1DViewer_Det_types]:
-                logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
-        elif detectors_type[ind_det] == 'DAQ2D':
-            if det not in [det['name'] for det in DAQ_2DViewer_Det_types]:
-                logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {det} for {mod_name} module')
-
-    for act in actuators:
-        if act not in [det['name'] for det in DAQ_Move_Stage_type]:
-            logger.warning(f'Cannot load this PID model as the corresponding plugins are not installed: {act} for {mod_name} module')

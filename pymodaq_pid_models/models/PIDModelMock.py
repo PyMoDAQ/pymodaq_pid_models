@@ -2,31 +2,22 @@ import os
 from pyqtgraph.parametertree import Parameter
 from PyQt5.QtCore import pyqtSignal
 from pymodaq.daq_utils.daq_utils import ThreadCommand
-from ..utils import PIDModelGeneric, check_modules
+from ..utils import PIDModelGeneric
 import time
 
 
 
 class PIDModelMock(PIDModelGeneric):
-    params = []
 
-    status_sig = pyqtSignal(ThreadCommand)
-
-    actuators = ['Mock']
-    actuators_name = ['Axis test PID']
-
-    detectors_type = ['DAQ0D'] # with entries either 'DAQ0D', 'DAQ1D' or 'DAQ2D'
-    detectors = ['Mock']
-    detectors_name = ['Testing PID']
-
-    check_modules(detectors, detectors_type, actuators, mod_name=__module__)
+    actuators_name = ["MockAct"]
+    detectors_name = ['MockDet']
 
     def __init__(self, pid_controller):
         super().__init__(pid_controller)
         self.pid_controller = pid_controller
         self.water_temp = 20
         self.curr_time = time.perf_counter()
-
+        self.get_mod_from_name = pid_controller.module_manager.get_mod_from_name
 
 
     def update_settings(self, param):
@@ -40,8 +31,8 @@ class PIDModelMock(PIDModelGeneric):
             pass
 
     def ini_model(self):
-        self.pid_controller.detector_modules[0].settings.child('main_settings', 'wait_time').setValue(0)
-        self.pid_controller.settings.child('move_settings', 'units').setValue('°C')
+        self.get_mod_from_name('MockDet', 'det').settings.child('main_settings', 'wait_time').setValue(0)
+        self.get_mod_from_name('MockAct', 'act').settings.child('move_settings', 'units').setValue('°C')
 
     def convert_input(self, measurements):
         """
