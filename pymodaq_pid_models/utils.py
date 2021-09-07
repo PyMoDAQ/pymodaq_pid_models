@@ -12,7 +12,7 @@ DAQ_NDViewer_Det_types = get_plugins('daq_NDviewer')
 
 class PIDModelGeneric:
     params = []
-
+    Nsetpoint = 1
     status_sig = pyqtSignal(ThreadCommand)
     actuators_name = []
     detectors_name = []

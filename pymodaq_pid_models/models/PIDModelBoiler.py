@@ -7,7 +7,7 @@ import time
 
 
 
-class PIDModelMock(PIDModelGeneric):
+class PIDModelBoiler(PIDModelGeneric):
 
     actuators_name = ["MockAct"]
     detectors_name = ['MockDet']
