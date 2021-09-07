@@ -67,10 +67,11 @@ class PIDModelMock(PIDModelGeneric):
         if output > 0:
             # boiler can only produce heat, not cold
             pass
-        self.water_temp += 1 * output * dt
-
+            self.water_temp += 1 * output * dt
+        else:
+            output = 0
         # some heat dissipation
-        self.water_temp -= 0.02 * dt
+        self.water_temp -= 0.2 * dt
         self.curr_output = output
         return [output]
 
