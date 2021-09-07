@@ -64,12 +64,13 @@ class PIDModelBoiler(PIDModelGeneric):
         """
         #print('output converted')
 
-        if output > 0:
-            # boiler can only produce heat, not cold
-            pass
-            self.water_temp += 1 * output * dt
-        else:
-            output = 0
+        # if output > 0:
+        #     # boiler can only produce heat, not cold
+        #     pass
+        #     self.water_temp += 1 * output * dt
+        # else:
+        #     output = 0
+        self.water_temp += 1 * output * dt
         # some heat dissipation
         self.water_temp -= 0.2 * dt
         self.curr_output = output

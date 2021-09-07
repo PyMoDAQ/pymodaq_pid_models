@@ -14,6 +14,7 @@ class PIDModelBeamSteering(PIDModelGeneric):
     actuators_name = ["Xaxis"]
     detectors_name = ['Camera']
     Nsetpoint = 1
+    params = [{'title': 'Threshold', 'name': 'threshold', 'type': 'float', 'value': 10.}]
 
     def __init__(self, pid_controller):
         super().__init__(pid_controller)
@@ -51,9 +52,10 @@ class PIDModelBeamSteering(PIDModelGeneric):
         """
         #print('input conversion done')
         image = measurements['Camera']['data2D']['Camera_Mock2DPID_CH000']['data']
-        image = image - 1.2 * np.mean(image)
+        image = image - self.settings.child('threshold').value()
         image[image < 0] = 0
         x, y = center_of_mass(image)
+        self.curr_input = y
         return y
 
     def convert_output(self, output, dt, stab=True):
@@ -71,7 +73,7 @@ class PIDModelBeamSteering(PIDModelGeneric):
         #print('output converted')
         
         self.curr_output = output
-        return [output]
+        return [self.curr_input+self.curr_output if self.curr_input is not None else self.curr_output]
 
 
 if __name__ == '__main__':
