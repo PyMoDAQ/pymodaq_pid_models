@@ -1,23 +1,14 @@
-import os
-from pyqtgraph.parametertree import Parameter
-from PyQt5.QtCore import pyqtSignal
-from pymodaq.daq_utils.daq_utils import ThreadCommand
-from ..utils import PIDModelGeneric
-import time
 
+from pymodaq_pid.utils import PIDModelGeneric, OutputToActuator
 
 
 class PIDModelBoiler(PIDModelGeneric):
 
-    actuators_name = ["MockAct"]
-    detectors_name = ['MockDet']
+    actuators_name = ["Heater"]
+    detectors_name = ['Thermometer']
 
     def __init__(self, pid_controller):
         super().__init__(pid_controller)
-        self.pid_controller = pid_controller
-        self.water_temp = 20
-        self.curr_time = time.perf_counter()
-        self.get_mod_from_name = pid_controller.module_manager.get_mod_from_name
 
 
     def update_settings(self, param):
@@ -31,8 +22,7 @@ class PIDModelBoiler(PIDModelGeneric):
             pass
 
     def ini_model(self):
-        self.get_mod_from_name('MockDet', 'det').settings.child('main_settings', 'wait_time').setValue(0)
-        self.get_mod_from_name('MockAct', 'act').settings.child('move_settings', 'units').setValue('°C')
+        self.get_mod_from_name('Thermometer', 'det').settings.child('main_settings', 'wait_time').setValue(0)
 
     def convert_input(self, measurements):
         """
@@ -46,36 +36,61 @@ class PIDModelBoiler(PIDModelGeneric):
         float: the converted input
 
         """
-        #print('input conversion done')
-        self.curr_input = self.water_temp
-        return self.water_temp
+        self.curr_input = measurements
+        return measurements
 
     def convert_output(self, output, dt, stab=True):
         """
-        Convert the output of the PID in units to be fed into the actuator
-        Parameters
-        ----------
-        output: (float) output value from the PID from which the model extract a value of the same units as the actuator
-
-        Returns
-        -------
-        list: the converted output as a list (if there are a few actuators)
 
         """
-        #print('output converted')
+        out_put_to_actuator = OutputToActuator('rel', values=[output])
 
-        # if output > 0:
-        #     # boiler can only produce heat, not cold
-        #     pass
-        #     self.water_temp += 1 * output * dt
-        # else:
-        #     output = 0
-        self.water_temp += 1 * output * dt
-        # some heat dissipation
-        self.water_temp -= 0.2 * dt
-        self.curr_output = output
-        return [output]
+        return out_put_to_actuator
+
+
+def main():
+    from pymodaq.dashboard import DashBoard
+    from pymodaq.daq_utils.daq_utils import get_set_preset_path
+    from pymodaq.daq_utils import gui_utils as gutils
+    from pathlib import Path
+    from PyQt5 import QtWidgets
+    from pymodaq_pid.pid_controller import DAQ_PID
+
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    win = QtWidgets.QMainWindow()
+    area = gutils.DockArea()
+    win.setCentralWidget(area)
+    win.resize(1000, 500)
+    win.setWindowTitle('PyMoDAQ Dashboard')
+
+    dashboard = DashBoard(area)
+    file = Path(get_set_preset_path()).joinpath("Boiler.xml")
+    if file.exists():
+        dashboard.set_preset_mode(file)
+        # prog.load_scan_module()
+        pid_area = gutils.DockArea()
+        pid_window = QtWidgets.QMainWindow()
+        pid_window.setCentralWidget(pid_area)
+
+        prog = DAQ_PID(pid_area, dashboard.modules_manager)
+        pid_window.show()
+        pid_window.setWindowTitle('PidController')
+        QtWidgets.QApplication.processEvents()
+        prog.settings.child('models', 'model_class').setValue('PIDModelBoiler')
+
+
+    else:
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setText(f"The default file specified in the configuration file does not exists!\n"
+                       f"{file}\n"
+                       f"Impossible to load the DAQ_PID Module")
+        msgBox.setStandardButtons(msgBox.Ok)
+        ret = msgBox.exec()
+
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
-    pass
+    main()
+

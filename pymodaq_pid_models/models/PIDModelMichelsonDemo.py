@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSignal, QThread, QTimer, pyqtSlot
 from pyqtgraph.dockarea import Dock
 from pymodaq.daq_utils.daq_utils import ThreadCommand, linspace_step, get_set_pid_path
-from ..utils import PIDModelGeneric
+from pymodaq_pid.utils import PIDModelGeneric
 from pymodaq.daq_utils.plotting.viewer1D.viewer1D_main import Viewer1D
 from pymodaq.daq_utils.math_utils import LSqEllipse
 import time
