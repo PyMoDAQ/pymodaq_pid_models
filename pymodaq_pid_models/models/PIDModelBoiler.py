@@ -4,8 +4,14 @@ from pymodaq_pid.utils import PIDModelGeneric, OutputToActuator
 
 class PIDModelBoiler(PIDModelGeneric):
 
+    limits = dict(max=dict(state=False, value=10),
+                  min=dict(state=False, value=0), )
+    konstants = dict(kp=3, ki=1, kd=0.0001)
+
     actuators_name = ["Heater"]
     detectors_name = ['Thermometer']
+
+    setpoint_ini = [20]
 
     def __init__(self, pid_controller):
         super().__init__(pid_controller)
@@ -22,6 +28,7 @@ class PIDModelBoiler(PIDModelGeneric):
             pass
 
     def ini_model(self):
+        super().ini_model()
         self.get_mod_from_name('Thermometer', 'det').settings.child('main_settings', 'wait_time').setValue(0)
 
     def convert_input(self, measurements):
@@ -36,14 +43,15 @@ class PIDModelBoiler(PIDModelGeneric):
         float: the converted input
 
         """
-        self.curr_input = measurements
-        return measurements
+        self.curr_input = measurements['Thermometer']['data0D']['Thermometer_Boiler_CH000']['data']
+
+        return self.curr_input
 
     def convert_output(self, output, dt, stab=True):
         """
 
         """
-        out_put_to_actuator = OutputToActuator('rel', values=[output])
+        out_put_to_actuator = OutputToActuator('abs', values=[output])
 
         return out_put_to_actuator
 

@@ -7,6 +7,8 @@ class PIDModelBeamSteering(PIDModelGeneric):
                   min=dict(state=True, value=-10),)
     konstants = dict(kp=1, ki=0.01, kd=0.001)
 
+    setpoint_ini = [128]
+
     actuators_name = ["Xaxis"]
     detectors_name = ['Camera']
     Nsetpoint = 1
@@ -26,9 +28,7 @@ class PIDModelBeamSteering(PIDModelGeneric):
             pass
 
     def ini_model(self):
-        pass
-        # self.get_mod_from_name('Camera', 'det').settings.child('main_settings', 'wait_time').setValue(0)
-        # self.get_mod_from_name('Xaxis', 'act').settings.child('move_settings', 'units').setValue('°C')
+        super().ini_model()
 
     def convert_input(self, measurements):
         """
