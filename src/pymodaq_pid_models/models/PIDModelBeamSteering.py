@@ -1,4 +1,4 @@
-from pymodaq_pid.utils import PIDModelGeneric, OutputToActuator
+from pymodaq.pid.utils import PIDModelGeneric, OutputToActuator, InputFromDetector, main
 from scipy.ndimage import center_of_mass
 
 
@@ -7,11 +7,12 @@ class PIDModelBeamSteering(PIDModelGeneric):
                   min=dict(state=True, value=-10),)
     konstants = dict(kp=1, ki=0.01, kd=0.001)
 
-    setpoint_ini = [128]
+    setpoint_ini = [128, 128]
 
-    actuators_name = ["Xaxis"]
+    actuators_name = ["Xaxis", "Yaxis"]
     detectors_name = ['Camera']
-    Nsetpoint = 1
+
+    Nsetpoints = 2
     params = [{'title': 'Threshold', 'name': 'threshold', 'type': 'float', 'value': 10.}]
 
     def __init__(self, pid_controller):
@@ -47,10 +48,10 @@ class PIDModelBeamSteering(PIDModelGeneric):
         image = image - self.settings.child('threshold').value()
         image[image < 0] = 0
         x, y = center_of_mass(image)
-        self.curr_input = y
-        return y
+        self.curr_input = [y, x]
+        return InputFromDetector([y, x])
 
-    def convert_output(self, output, dt, stab=True):
+    def convert_output(self, outputs, dt, stab=True):
         """
         Convert the output of the PID in units to be fed into the actuator
         Parameters
@@ -64,53 +65,13 @@ class PIDModelBeamSteering(PIDModelGeneric):
         """
         #print('output converted')
         
-        self.curr_output = output
-        return OutputToActuator(mode='rel', values=[output])
+        self.curr_output = outputs
+        return OutputToActuator(mode='rel', values=outputs)
 
 
-def main():
-    from pymodaq.dashboard import DashBoard
-    from pymodaq.daq_utils.daq_utils import get_set_preset_path
-    from pymodaq.daq_utils import gui_utils as gutils
-    from pathlib import Path
-    from PyQt5 import QtWidgets
-    from pymodaq_pid.pid_controller import DAQ_PID
-
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    win = QtWidgets.QMainWindow()
-    area = gutils.DockArea()
-    win.setCentralWidget(area)
-    win.resize(1000, 500)
-    win.setWindowTitle('PyMoDAQ Dashboard')
-
-    dashboard = DashBoard(area)
-    file = Path(get_set_preset_path()).joinpath("BeamSteering.xml")
-    if file.exists():
-        dashboard.set_preset_mode(file)
-        # prog.load_scan_module()
-        pid_area = gutils.DockArea()
-        pid_window = QtWidgets.QMainWindow()
-        pid_window.setCentralWidget(pid_area)
-
-        prog = DAQ_PID(pid_area, dashboard.modules_manager)
-        pid_window.show()
-        pid_window.setWindowTitle('PidController')
-        QtWidgets.QApplication.processEvents()
-
-
-    else:
-        msgBox = QtWidgets.QMessageBox()
-        msgBox.setText(f"The default file specified in the configuration file does not exists!\n"
-                       f"{file}\n"
-                       f"Impossible to load the DAQ_PID Module")
-        msgBox.setStandardButtons(msgBox.Ok)
-        ret = msgBox.exec()
-
-    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
-    main()
+    main("BeamSteering.xml")
 
 

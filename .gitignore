@@ -116,9 +116,9 @@ venv.bak/
 *.iml
 *.xml
 *.pyc
-pymodaq_pid_models/tutorial.Learner1D.ipynb
-pymodaq_pid_models/__pycache__/__init__.cpython-37.pyc
-pymodaq_pid_models/__pycache__/version.cpython-37.pyc
+src/pymodaq_pid_models/tutorial.Learner1D.ipynb
+src/pymodaq_pid_models/__pycache__/__init__.cpython-37.pyc
+src/pymodaq_pid_models/__pycache__/version.cpython-37.pyc
 .idea/pymodaq_pid_models.iml
 *.iml
 *.pyc

@@ -1,10 +1,9 @@
 import os
-from pyqtgraph.parametertree import Parameter
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import pyqtSignal, QThread, QTimer, pyqtSlot
+from PyQt5.QtCore import QThread, QTimer, pyqtSlot
 from pyqtgraph.dockarea import Dock
 from pymodaq.daq_utils.daq_utils import ThreadCommand, linspace_step, get_set_pid_path
-from pymodaq_pid.utils import PIDModelGeneric
+from pymodaq.pid.utils import PIDModelGeneric, OutputToActuator, main
 from pymodaq.daq_utils.plotting.viewer1D.viewer1D_main import Viewer1D
 from pymodaq.daq_utils.math_utils import LSqEllipse
 import time
@@ -369,4 +368,4 @@ class PIDModelMichelsonDemo(PIDModelGeneric):
 
 
 if __name__ == '__main__':
-    pass
+    main('Michelson.xml')
