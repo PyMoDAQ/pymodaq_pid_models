@@ -1,6 +1,6 @@
 import os
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QThread, QTimer, pyqtSlot
+from qtpy import QtWidgets
+from qtpy.QtCore import QThread, QTimer, Slot
 from pyqtgraph.dockarea import Dock
 from pymodaq.daq_utils.daq_utils import ThreadCommand, linspace_step, get_set_pid_path
 from pymodaq.pid.utils import PIDModelGeneric, OutputToActuator, main
@@ -256,7 +256,6 @@ class PIDModelMichelsonDemo(PIDModelGeneric):
             QtWidgets.QApplication.processEvents()
         self.timer.stop()
 
-    pyqtSlot(OrderedDict) #edict(name=self.title,data0D=None,data1D=None,data2D=None)
     def det_done(self,data):
         """
             | Initialize 0D/1D/2D datas from given data parameter.
@@ -284,7 +283,6 @@ class PIDModelMichelsonDemo(PIDModelGeneric):
             QtWidgets.QApplication.processEvents()
         self.timer.stop()
 
-    pyqtSlot(str,float)
     def move_done(self,name,position):
         #print(position)
         self.curr_position = position
